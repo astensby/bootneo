@@ -1,0 +1,33 @@
+=== Starting point sample application for Spring Data Neo4j using Spring Boot and Spring Data REST
+
+=== Installation
+
+Make sure to have a Neo4j Server running, http://neo4j.com/download[download] and start with +bin/neo4j start+.
+
+Run mvn spring-boot:run
+
+The application will start and expose all Repositories as Spring Data REST repository-endpoints.
+At runtime, Spring Data REST will create an implementation of this interface automatically.
+Then it will use the @RepositoryRestResource annotation to direct Spring MVC to create RESTful endpoints at /people and /beer.
+
+----
+
+To access the Spring Data REST repository-endpoints try:
+
+----
+curl http://localhost:8080/people
+curl http://localhost:8080/beer
+
+=== Roadmap:
+* Adding tests
+* Examples of more advanced queries in Repositories
+...
+
+
+=== Sample Cyper Queries
+
+[source,cypher]
+----
+MATCH (me:Person) RETURN me;
+----
+

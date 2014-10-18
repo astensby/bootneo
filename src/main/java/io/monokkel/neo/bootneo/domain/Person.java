@@ -1,27 +1,58 @@
 package io.monokkel.neo.bootneo.domain;
 
-import org.springframework.data.neo4j.annotation.GraphId;
-import org.springframework.data.neo4j.annotation.Indexed;
-import org.springframework.data.neo4j.annotation.NodeEntity;
+import org.springframework.data.neo4j.annotation.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @NodeEntity
 public class Person {
 
     @GraphId
-    public Long nodeId;
+    private Long nodeId;
 
     @Indexed(unique = true)
-    public int id;
+    private int id;
 
-    public String firstName;
+    private String firstName;
 
-    public String lastName;
+    private String lastName;
+
+    @Fetch
+    @RelatedToVia(type = "RATED")
+    private Set<Rating> ratings = new HashSet<Rating>();
+
+    @RelatedTo(type = "FAVORITE")
+    private Beer favorite;
+
+    public Beer getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(Beer favorite) {
+        this.favorite = favorite;
+    }
+
+    public Rating rates(Beer beer, Long rating) {
+        Rating r = new Rating(this, beer, rating);
+        ratings.add(r);
+        return r;
+    }
+
+    public Set<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Set<Rating> ratings) {
+        this.ratings = ratings;
+    }
 
 
     public Person() {
     }
 
-    public Person(String firstName, String lastName) {
+    public Person(int id, String firstName, String lastName) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
     }

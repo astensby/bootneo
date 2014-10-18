@@ -1,8 +1,10 @@
 package io.monokkel.neo.bootneo.domain;
 
-import org.springframework.data.neo4j.annotation.GraphId;
-import org.springframework.data.neo4j.annotation.Indexed;
-import org.springframework.data.neo4j.annotation.NodeEntity;
+import org.neo4j.graphdb.Direction;
+import org.springframework.data.neo4j.annotation.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by astensby on 24/08/14.
@@ -19,7 +21,24 @@ public class Beer {
     public String name;
     public String description;
 
-    public Beer(String name, String description) {
+    @Fetch
+    @RelatedToVia(type="RATED", direction = Direction.INCOMING)
+    Set<Rating> ratings = new HashSet<Rating>();
+
+    public Set<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Set<Rating> ratings) {
+        this.ratings = ratings;
+    }
+
+    public Beer(){
+
+    }
+
+    public Beer(long id, String name, String description) {
+        this.id = id;
         this.name = name;
         this.description = description;
 
